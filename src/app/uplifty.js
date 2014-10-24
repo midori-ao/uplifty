@@ -13,6 +13,6 @@ var app = angular.module('uplifty', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSan
   });
 
 var api = function($resource){
-  this.emotions = $resource('http://localhost:8000/emotions/');
+  this.emotions = $resource('http://localhost:8000/emotions/'); //node app port
 };
 app.service('Api', api);
