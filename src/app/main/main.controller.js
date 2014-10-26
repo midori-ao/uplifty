@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('uplifty')
-  .controller('MainCtrl', function ($scope, Api) {
+  .controller('MainCtrl', function ($scope, Api, testResource) {
     console.log('is this even working');
     $scope.awesomeThings = [
       {
@@ -65,6 +65,9 @@ angular.module('uplifty')
       awesomeThing.rank = Math.random();
     });
 
-    //returns [{first : 'Mark', last : 'Twain', quote : '...'}]
     $scope.emotions = Api.emotions.query();
+
+    testResource.save({ username : 'test', email : 'testemail', testField : 'lolfield' }, function (data) {
+      console.log(data + 'success');
+    });
   });

@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "dependencies": {},
   "devDependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.9.1",
     "browser-sync": "^1.3.6",
     "chalk": "^0.4.0",
@@ -35,6 +36,7 @@
     "karma-jasmine": "^0.1.5",
     "karma-phantomjs-launcher": "^0.1.4",
     "main-bower-files": "^2.0.0",
+    "mongoose": "^3.8.18",
     "protractor": "^1.1.1",
     "require-dir": "^0.1.0",
     "uglify-save-license": "^0.4.1",
