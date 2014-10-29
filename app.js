@@ -1,61 +1,84 @@
-var express  = require('express'),
-	app		 = express(),
-	http	 = require('http'),
-	path 	 = require('path'),
-	mongoose = require('mongoose'),
-	server	 = http.createServer(app).listen(8000);
+var express  		= require('express'),
+	http	 		= require('http'),
+	path 	 		= require('path'),
+	mongoose 		= require('mongoose'),
+	passport		= require('passport'),
+	morgan 			= require('morgan'),
+    bodyParser 		= require('body-parser'),
+    methodOverride  = require('method-override'),
+    cookieParser    = require('cookie-parser'),
+    cookieSession 	= require('cookie-session'),
+    session 		= require('express-session'),
+    csrf 			= require('csurf');
 
-//user
-var UserSchema = {
-	username:	{ type: String, required:true, unique:true, index: true },
-	email:		{ type: String, required:true, unique:true, index: true },
-	password:	{ type: String },
-	testField: 	{ type: String }
-};
+var app = module.exports = express();
 
-var userschema = new mongoose.Schema(UserSchema);
-var User = mongoose.model('user', userschema);
-
+//models
+var User = require('./server/models/User.js');
 
 //mongo
 mongoose.connect('mongodb://localhost/upliftydb');
 
-// var user = require('./api/userProfile');
-// app.use('/createUser', user);
+//passport integration
+app.set('views', __dirname + '/client/views');
+app.set('view engine', 'jade');
+app.use(morgan('dev'));
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.use(methodOverride());
+app.use(express.static(path.join(__dirname, 'client')));
+app.use(cookieParser());
+app.use(session(
+    {
+        secret: process.env.COOKIE_SECRET || "Superdupersecret"
+    }));
 
-app.post('/createUser', function(req,res){
-    var data = req.body;
-    console.log('sup');
-
-    // if(data){
-    //     //some validation here
-    // } else {
-    //     console.log(error);
-    //     return;
-    // }
-
-    var createUser = new User(data);
-    createUser.username = 'dumb';
-    createUser.password = 'dummypassword';
-    createUser.email = 'derp';
-    createUser.testField = 'test';
-
-    console.log(createUser);
-    createUser.save(function(err){
-    	res.send(createUser);
+var env = process.env.NODE_ENV || 'development';
+if ('development' === env || 'production' === env) {
+    app.use(csrf());
+    app.use(function(req, res, next) {
+        res.cookie('XSRF-TOKEN', req.csrfToken());
+        next();
     });
-});
-
-//local db - move it to mongo
-var	emotions = require('./emotions');
-
-//angular app
-if (process.NODE_ENV === 'production') {
-	app.use(express.static(path.join(__dirname, 'dist')));
-} else {
-	app.use(express.static(path.join(__dirname, 'dist')));
 }
 
-app.use(emotions);
+app.use(passport.initialize());
+app.use(passport.session());
 
-module.exports = app;
+passport.use(User.localStrategy);
+// passport.use(User.facebookStrategy());
+
+passport.serializeUser(User.serializeUser);
+passport.deserializeUser(User.deserializeUser);
+
+//routes
+require('./server/routes.js')(app);
+
+// //move to another folder
+// app.post('/createUser', function(req,res){
+//     var data = req.body;
+//     console.log('sup');
+
+//     var createUser = new User(data);
+//     createUser.username = 'dumb';
+//     createUser.password = 'dummypassword';
+//     createUser.email = 'derp';
+//     createUser.testField = 'test';
+
+//     console.log(createUser);
+//     createUser.save(function(err){
+//     	res.send(createUser);
+//     });
+// });
+
+// //angular app
+// if (process.NODE_ENV === 'production') {
+// 	app.use(express.static(path.join(__dirname, 'dist')));
+// } else {
+// 	app.use(express.static(path.join(__dirname, 'dist'))); //src, but dist for now as it's not working correctly
+// }
+
+app.set('port', process.env.PORT || 8000);
+http.createServer(app).listen(app.get('port'), function(){
+    console.log("Express server listening on port " + app.get('port'));
+});
