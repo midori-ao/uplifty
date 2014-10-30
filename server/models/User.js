@@ -104,9 +104,9 @@ module.exports = {
             if(!user) {
                 done(null, false, { message: 'Incorrect username.' });
             }
-            else if(!module.exports.validPassword(password , user.password)) {
-                done(null, false, { message: 'Incorrect username.' });
-            }
+            // else if(!module.exports.validPassword(password , user.password)) {
+            //     done(null, false, { message: 'Incorrect username.' });
+            // }
             else {
                 return done(null, user);
             }

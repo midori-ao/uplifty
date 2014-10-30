@@ -9,8 +9,11 @@ var express  		= require('express'),
     cookieParser    = require('cookie-parser'),
     cookieSession 	= require('cookie-session'),
     session 		= require('express-session'),
+    redis 			= require('redis'),
+    RedisStore 		= require('connect-redis')(session),
     csrf 			= require('csurf');
 
+var Config = require('./config/config.js');
 var app = module.exports = express();
 
 //models
@@ -18,6 +21,9 @@ var User = require('./server/models/User.js');
 
 //mongo
 mongoose.connect('mongodb://localhost/upliftydb');
+
+//redis
+// var client = redis.createClient();
 
 //passport integration
 app.set('views', __dirname + '/client/views');
@@ -27,11 +33,41 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(express.static(path.join(__dirname, 'client')));
+
 app.use(cookieParser());
-app.use(session(
-    {
-        secret: process.env.COOKIE_SECRET || "Superdupersecret"
-    }));
+app.use(session({
+  store: new RedisStore({
+    host: Config.redis.host,
+    port: Config.redis.port,
+    pass: Config.redis.pass
+  }),
+  secret: '1234567890QWERTY'
+}));
+// app.use(session({
+//     store: new RedisStore({ host: '127.0.0.1', port: 6379 }),
+//     secret: 'keyboard cat'
+// }));
+
+// client.on("error", function (err) {
+//     console.log("Error " + err);
+// });
+ 
+// client.set("string key", "string val", redis.print);
+// client.hset("hash key", "hashtest 1", "some value", redis.print);
+// client.hset(["hash key", "hashtest 2", "some other value"], redis.print);
+// client.hkeys("hash key", function (err, replies) {
+//     console.log(replies.length + " replies:");
+//     replies.forEach(function (reply, i) {
+//         console.log("    " + i + ": " + reply);
+//     });
+//     client.quit();
+// });
+
+
+// app.use(session(
+//     {
+//         secret: process.env.COOKIE_SECRET || "Superdupersecret"
+//     }));
 
 var env = process.env.NODE_ENV || 'development';
 if ('development' === env || 'production' === env) {
