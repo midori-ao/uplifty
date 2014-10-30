@@ -22,9 +22,6 @@ var User = require('./server/models/User.js');
 //mongo
 mongoose.connect('mongodb://localhost/upliftydb');
 
-//redis
-// var client = redis.createClient();
-
 //passport integration
 app.set('views', __dirname + '/client/views');
 app.set('view engine', 'jade');
@@ -43,31 +40,6 @@ app.use(session({
   }),
   secret: '1234567890QWERTY'
 }));
-// app.use(session({
-//     store: new RedisStore({ host: '127.0.0.1', port: 6379 }),
-//     secret: 'keyboard cat'
-// }));
-
-// client.on("error", function (err) {
-//     console.log("Error " + err);
-// });
- 
-// client.set("string key", "string val", redis.print);
-// client.hset("hash key", "hashtest 1", "some value", redis.print);
-// client.hset(["hash key", "hashtest 2", "some other value"], redis.print);
-// client.hkeys("hash key", function (err, replies) {
-//     console.log(replies.length + " replies:");
-//     replies.forEach(function (reply, i) {
-//         console.log("    " + i + ": " + reply);
-//     });
-//     client.quit();
-// });
-
-
-// app.use(session(
-//     {
-//         secret: process.env.COOKIE_SECRET || "Superdupersecret"
-//     }));
 
 var env = process.env.NODE_ENV || 'development';
 if ('development' === env || 'production' === env) {
