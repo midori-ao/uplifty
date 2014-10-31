@@ -1,5 +1,5 @@
 var _ =           require('underscore')
-    , User =      require('../models/mongo.js')
+    , User =      require('../models/UserSchema')
     , userRoles = require('../../client/js/routingConfig').userRoles;
 
 module.exports = {

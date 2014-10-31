@@ -3,7 +3,7 @@ var _ =           require('underscore')
     , passport =  require('passport')
     , AuthCtrl =  require('./controllers/auth')
     , UserCtrl =  require('./controllers/user')
-    , User =      require('./models/User.js')
+    , User =      require('./api/User.js')
     , userRoles = require('../client/js/routingConfig').userRoles
     , accessLevels = require('../client/js/routingConfig').accessLevels;
 
@@ -19,20 +19,6 @@ var routes = [
         }]
     },
 
-    // // OAUTH
-    // {
-    //     path: '/auth/twitter',
-    //     httpMethod: 'GET',
-    //     middleware: [passport.authenticate('twitter')]
-    // },
-    // {
-    //     path: '/auth/twitter/callback',
-    //     httpMethod: 'GET',
-    //     middleware: [passport.authenticate('twitter', {
-    //         successRedirect: '/',
-    //         failureRedirect: '/login'
-    //     })]
-    // },
     // {
     //     path: '/auth/facebook',
     //     httpMethod: 'GET',
@@ -42,32 +28,6 @@ var routes = [
     //     path: '/auth/facebook/callback',
     //     httpMethod: 'GET',
     //     middleware: [passport.authenticate('facebook', {
-    //         successRedirect: '/',
-    //         failureRedirect: '/login'
-    //     })]
-    // },
-    // {
-    //     path: '/auth/google',
-    //     httpMethod: 'GET',
-    //     middleware: [passport.authenticate('google')]
-    // },
-    // {
-    //     path: '/auth/google/return',
-    //     httpMethod: 'GET',
-    //     middleware: [passport.authenticate('google', {
-    //         successRedirect: '/',
-    //         failureRedirect: '/login'
-    //     })]
-    // },
-    // {
-    //     path: '/auth/linkedin',
-    //     httpMethod: 'GET',
-    //     middleware: [passport.authenticate('linkedin')]
-    // },
-    // {
-    //     path: '/auth/linkedin/callback',
-    //     httpMethod: 'GET',
-    //     middleware: [passport.authenticate('linkedin', {
     //         successRedirect: '/',
     //         failureRedirect: '/login'
     //     })]

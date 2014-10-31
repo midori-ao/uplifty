@@ -16,8 +16,15 @@ var express  		= require('express'),
 var Config = require('./config/config.js');
 var app = module.exports = express();
 
+//mongo
+var mongoUri = process.env.MONGOLAB_URI ||
+  process.env.MONGOHQ_URL || Config.mongo.address ||
+  'mongodb://localhost/uplifty';
+
+mongoose.connect(mongoUri);
+
 //models
-var User = require('./server/models/User.js');
+var User = require('./server/api/User.js');
 
 //passport integration
 app.set('views', __dirname + '/client/views');
@@ -58,30 +65,6 @@ passport.deserializeUser(User.deserializeUser);
 
 //routes
 require('./server/routes.js')(app);
-
-// //move to another folder
-// app.post('/createUser', function(req,res){
-//     var data = req.body;
-//     console.log('sup');
-
-//     var createUser = new User(data);
-//     createUser.username = 'dumb';
-//     createUser.password = 'dummypassword';
-//     createUser.email = 'derp';
-//     createUser.testField = 'test';
-
-//     console.log(createUser);
-//     createUser.save(function(err){
-//     	res.send(createUser);
-//     });
-// });
-
-// //angular app
-// if (process.NODE_ENV === 'production') {
-// 	app.use(express.static(path.join(__dirname, 'dist')));
-// } else {
-// 	app.use(express.static(path.join(__dirname, 'dist'))); //src, but dist for now as it's not working correctly
-// }
 
 app.set('port', process.env.PORT || 8000);
 http.createServer(app).listen(app.get('port'), function(){

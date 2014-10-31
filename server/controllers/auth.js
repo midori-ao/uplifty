@@ -1,5 +1,5 @@
 var passport =  require('passport')
-    , User = require('../models/User.js');
+    , User = require('../api/User.js');
 
 module.exports = {
     register: function(req, res, next) {
