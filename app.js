@@ -19,9 +19,6 @@ var app = module.exports = express();
 //models
 var User = require('./server/models/User.js');
 
-//mongo
-mongoose.connect('mongodb://localhost/upliftydb');
-
 //passport integration
 app.set('views', __dirname + '/client/views');
 app.set('view engine', 'jade');
