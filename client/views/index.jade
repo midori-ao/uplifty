@@ -26,6 +26,8 @@ html(lang='en', data-ng-app='angular-client-side-auth')
                             a(href='/') Home
                         li(data-access-level='accessLevels.user', active-nav='nestedTop')
                             a(href='/private') Private
+                        li(data-access-level='accessLevels.user', active-nav='nestedTop')
+                            a(href='/status') Status
                         li(data-access-level='accessLevels.admin', active-nav)
                             a(href='/admin') Admin
                         li(data-access-level='accessLevels.user')
@@ -61,6 +63,12 @@ html(lang='en', data-ng-app='angular-client-side-auth')
             include partials/home
         script(type="text/ng-template", id="login")
             include partials/login
+        script(type="text/ng-template", id="status/layout")
+            include partials/status/layout
+        script(type="text/ng-template", id="status/home")
+            include partials/status/home
+        script(type="text/ng-template", id="status/submission")
+            include partials/status/submission
         script(type="text/ng-template", id="private/layout")
             include partials/private/layout
         script(type="text/ng-template", id="private/home")

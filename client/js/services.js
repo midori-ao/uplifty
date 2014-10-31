@@ -33,6 +33,11 @@ angular.module('angular-client-side-auth')
                 success();
             }).error(error);
         },
+        createStatus: function(status, success, error) {
+            $http.post('/createStatus', status).success(function(res) {
+                success();
+            }).error(error);
+        },
         login: function(user, success, error) {
             $http.post('/login', user).success(function(user){
                 changeUser(user);

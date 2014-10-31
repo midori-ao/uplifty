@@ -1,5 +1,6 @@
-var passport =  require('passport')
-    , User = require('../api/User.js');
+var passport = require('passport'),
+    User     = require('../api/User.js'),
+    Status   = require('../api/Status.js');
 
 module.exports = {
     register: function(req, res, next) {
@@ -42,5 +43,19 @@ module.exports = {
     logout: function(req, res) {
         req.logout();
         res.send(200);
+    },
+
+    createStatus: function(req, res, next) {
+        //some auth here..
+        var json = req;
+        console.log('console out'+json);
+        Status.createStatus(req.body.username, req.body.text, function(err, status) {
+        // Status.createStatus(function(err, status) {
+            if(err) { next(err); }
+            res.json(200, { "username": status.author.username, "text": status.text });
+
+            console.log('is this working? i dont know what im doing. what do');
+        });
+
     }
 };

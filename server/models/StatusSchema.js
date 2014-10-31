@@ -4,12 +4,12 @@ var mongoose = require('mongoose'),
 //status
 
 var StatusSchema = new mongoose.Schema({
-	id: 		{ type: String },
+	id: 		{},
 	author:     {
 		id: 	{},
 		username: { type: String }
 	},
-	date: 		{ type: Date, default: Date.now },
+	date: 		{ type: String },
 	likes: 		[],
 	text:		{ type: String }
 });

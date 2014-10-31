@@ -63,6 +63,26 @@ angular.module('angular-client-side-auth')
 }]);
 
 angular.module('angular-client-side-auth')
+.controller('StatusCtrl',
+['$rootScope', '$scope', '$location', 'Auth', function($rootScope, $scope, $location, Auth) {
+    $scope.role = Auth.userRoles.user;
+    $scope.userRoles = Auth.userRoles;
+
+    $scope.createStatus = function() {
+        Auth.createStatus({
+                username: $scope.username,
+                text: $scope.text
+            },
+            function() {
+                $location.path('/status/');
+            },
+            function(err) {
+                $rootScope.error = err;
+            });
+    };
+}]);
+
+angular.module('angular-client-side-auth')
 .controller('AdminCtrl',
 ['$rootScope', '$scope', 'Users', 'Auth', function($rootScope, $scope, Users, Auth) {
     $scope.loading = true;

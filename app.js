@@ -1,17 +1,17 @@
-var express  		= require('express'),
-	http	 		= require('http'),
-	path 	 		= require('path'),
-	mongoose 		= require('mongoose'),
-	passport		= require('passport'),
-	morgan 			= require('morgan'),
-    bodyParser 		= require('body-parser'),
+var express  		    = require('express'),
+    http	 		      = require('http'),
+    path 	 		      = require('path'),
+    mongoose 		    = require('mongoose'),
+    passport		    = require('passport'),
+    morgan 			    = require('morgan'),
+    bodyParser 		  = require('body-parser'),
     methodOverride  = require('method-override'),
     cookieParser    = require('cookie-parser'),
     cookieSession 	= require('cookie-session'),
-    session 		= require('express-session'),
-    redis 			= require('redis'),
-    RedisStore 		= require('connect-redis')(session),
-    csrf 			= require('csurf');
+    session 		    = require('express-session'),
+    redis 			    = require('redis'),
+    RedisStore 		  = require('connect-redis')(session),
+    csrf 			      = require('csurf');
 
 var Config = require('./config/config.js');
 var app = module.exports = express();
@@ -26,7 +26,6 @@ mongoose.connect(mongoUri);
 //models
 var User = require('./server/api/User.js');
 
-//passport integration
 app.set('views', __dirname + '/client/views');
 app.set('view engine', 'jade');
 app.use(morgan('dev'));
@@ -35,6 +34,7 @@ app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(express.static(path.join(__dirname, 'client')));
 
+//redis session cookie
 app.use(cookieParser());
 app.use(session({
   store: new RedisStore({
@@ -54,12 +54,11 @@ if ('development' === env || 'production' === env) {
     });
 }
 
+//passport
 app.use(passport.initialize());
 app.use(passport.session());
-
 passport.use(User.localStrategy);
 // passport.use(User.facebookStrategy());
-
 passport.serializeUser(User.serializeUser);
 passport.deserializeUser(User.deserializeUser);
 

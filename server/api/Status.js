@@ -5,28 +5,45 @@ var _             = require('underscore'),
 
 module.exports = {
 
-    createStatus: function(username, password, role, callback) {
-    	Status.find({}, function(err, statuses){
-                if (err) return console.log(err);
-                var maxid = parseInt(_.max(statuses, function(status) { return status.id; }).id) + 1 || 1;             
-            	Status.findOne({'username': username}, function(err, status) {
-                    if (user) if (user.username == username)  return callback("UserAlreadyExists");
-                    var status2 = {
-            			            id:         maxid,
-            			            author:     {
-                                        id: maxid ,
-                                        username: username
-                                    },
-            			            date:       'test',
-            			            likes:      role,
-                                    text:       text
-            			        };
-                    Status.create(status2, function (err) {
-            			if (err) return console.log(err);
-            			callback(null, status2);
-                    });
-                });
+    createStatus: function(username, text, callback) {
+
+        var status2 = {
+            id:         34,
+            author:     {
+                id: 40 ,
+                username: username
+            },
+            date:       'test',
+            likes:      'a',
+            text:       text
+        };
+
+        Status.create(status2, function (err) {
+            if (err) return console.log(err);
+            callback(null, status2);
         });
+
+    	// Status.find({}, function(err, statuses){
+     //            if (err) return console.log(err);
+     //            var maxid = parseInt(_.max(statuses, function(status) { return status.id; }).id) + 1 || 1;             
+     //        	Status.findOne({'username': username}, function(err, status) {
+     //                if (user) if (user.username == username)  return callback("UserAlreadyExists");
+     //                var status2 = {
+     //        			            id:         maxid,
+     //        			            author:     {
+     //                                    id: maxid ,
+     //                                    username: username
+     //                                },
+     //        			            date:       'test',
+     //        			            likes:      role,
+     //                                text:       text
+     //        			        };
+     //                Status.create(status2, function (err) {
+     //        			if (err) return console.log(err);
+     //        			callback(null, status2);
+     //                });
+     //            });
+     //    });
     },
 
     findAll: function() {

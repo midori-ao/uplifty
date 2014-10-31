@@ -53,6 +53,20 @@ angular.module('angular-client-side-auth', ['ngCookies', 'ui.router'])
             url: '/',
             templateUrl: 'home'
         })
+        .state('user.status', {
+            abstract: true,
+            url: '/status/',
+            templateUrl: 'status/layout'
+        })
+        .state('user.status.home', {
+            url: '',
+            templateUrl: 'status/home'
+        })
+        .state('user.status.submission', {
+            url: 'submission/',
+            templateUrl: 'status/submission',
+            controller: 'StatusCtrl'
+        })
         .state('user.private', {
             abstract: true,
             url: '/private/',

@@ -58,6 +58,20 @@ var routes = [
         accessLevel: accessLevels.admin
     },
 
+    // Status
+
+    // {
+    //     path: '/statuses',
+    //     httpMethod: 'GET',
+    //     middleware: [UserCtrl.index]
+    // },
+
+    {
+        path: '/createStatus',
+        httpMethod: 'POST',
+        middleware: [AuthCtrl.createStatus]
+    },
+
     // All other get requests should be handled by AngularJS's client-side routing system
     {
         path: '/*',
