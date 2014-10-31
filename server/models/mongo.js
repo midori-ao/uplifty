@@ -1,9 +1,9 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose'),
+	Config   = require('../../config/config.js');
 
 var mongoUri = process.env.MONGOLAB_URI ||
-  process.env.MONGOHQ_URL ||
+  process.env.MONGOHQ_URL || Config.mongo.address ||
   'mongodb://localhost/uplifty';
-
 
 mongoose.connect(mongoUri);
 
