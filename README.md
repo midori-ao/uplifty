@@ -10,4 +10,4 @@ Uplifty is an application that allows users to create their own statuses, and se
 
 ## Usage
 
-'npm install & npm app.js'
+`npm install & npm app.js`
