@@ -67,3 +67,13 @@ angular.module('angular-client-side-auth')
         }
     };
 });
+
+angular.module('angular-client-side-auth')
+.factory('Statuses', function($http) {
+    return {
+        getAll: function(success, error) {
+            console.log('sent request');
+            $http.get('/statuses').success(success).error(error);
+        }
+    };
+});

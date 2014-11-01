@@ -4,13 +4,14 @@ var mongoose = require('mongoose'),
 //status
 
 var StatusSchema = new mongoose.Schema({
-	id: 		{},
+	id: 		{ type: Number },
 	author:     {
-		id: 	{},
+		id: 	{ type: String },
 		username: { type: String }
 	},
 	date: 		{ type: String },
-	likes: 		[],
+	// likes: 		[],
+	category: 	{ type: String },
 	text:		{ type: String }
 });
 

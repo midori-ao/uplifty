@@ -35,7 +35,7 @@ module.exports = {
                 }
 
                 if(req.body.rememberme) req.session.cookie.maxAge = 1000 * 60 * 60 * 24 * 7;
-                res.json(200, { "role": user.role, "username": user.username });
+                res.json(200, { "role": user.role, "username": user.username, "id": user._id });
             });
         })(req, res, next);
     },
@@ -49,10 +49,11 @@ module.exports = {
         //some auth here..
         var json = req;
         console.log('console out'+json);
-        Status.createStatus(req.body.username, req.body.text, function(err, status) {
+        Status.createStatus(req.body.username, req.body.id, req.body.category, req.body.text, function(err, status) {
         // Status.createStatus(function(err, status) {
+            console.log(err);
             if(err) { next(err); }
-            res.json(200, { "username": status.author.username, "text": status.text });
+            res.json(200, { "username": status.author.username, "id": status.id, "category": status.category, "text": status.text });
 
             console.log('is this working? i dont know what im doing. what do');
         });

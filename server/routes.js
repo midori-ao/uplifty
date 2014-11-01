@@ -3,6 +3,7 @@ var _ =           require('underscore')
     , passport =  require('passport')
     , AuthCtrl =  require('./controllers/auth')
     , UserCtrl =  require('./controllers/user')
+    , StatusCtrl =  require('./controllers/status')
     , User =      require('./api/User.js')
     , userRoles = require('../client/js/routingConfig').userRoles
     , accessLevels = require('../client/js/routingConfig').accessLevels;
@@ -60,11 +61,11 @@ var routes = [
 
     // Status
 
-    // {
-    //     path: '/statuses',
-    //     httpMethod: 'GET',
-    //     middleware: [UserCtrl.index]
-    // },
+    {
+        path: '/statuses',
+        httpMethod: 'GET',
+        middleware: [StatusCtrl.index]
+    },
 
     {
         path: '/createStatus',
@@ -77,14 +78,17 @@ var routes = [
         path: '/*',
         httpMethod: 'GET',
         middleware: [function(req, res) {
-            var role = userRoles.public, username = '';
+            var role = userRoles.public, username = '', id = '';
             if(req.user) {
+                console.log(req.user);
                 role = req.user.role;
                 username = req.user.username;
+                id = req.user["_id"];
             }
             res.cookie('user', JSON.stringify({
                 'username': username,
-                'role': role
+                'role': role,
+                'id': id
             }));
             res.render('index');
         }]

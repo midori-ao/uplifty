@@ -64,13 +64,33 @@ angular.module('angular-client-side-auth')
 
 angular.module('angular-client-side-auth')
 .controller('StatusCtrl',
+['$rootScope', '$scope', 'Statuses', function($rootScope, $scope, Statuses) {
+
+    //get statuses
+    $scope.loading = true;
+    Statuses.getAll(function(res) {
+        $scope.statuses = res;
+        $scope.loading = false;
+    }, function(err) {
+        $rootScope.error = "Failed to fetch statuses.";
+        $scope.loading = false;
+    });
+
+}]);
+
+angular.module('angular-client-side-auth')
+.controller('StatusCreateCtrl',
 ['$rootScope', '$scope', '$location', 'Auth', function($rootScope, $scope, $location, Auth) {
-    $scope.role = Auth.userRoles.user;
-    $scope.userRoles = Auth.userRoles;
+
+    $scope.user = Auth.user;
+    $scope.categories = ['Daily Life','Relationships'];
+    console.log(Auth.user);
 
     $scope.createStatus = function() {
         Auth.createStatus({
-                username: $scope.username,
+                username: $scope.user.username,
+                id: $scope.user.id,
+                category: $scope.category,
                 text: $scope.text
             },
             function() {
