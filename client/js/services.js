@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('angular-client-side-auth')
+angular.module('uplifty')
 .factory('Auth', function($http, $cookieStore){
 
     var accessLevels = routingConfig.accessLevels
@@ -59,7 +59,7 @@ angular.module('angular-client-side-auth')
     };
 });
 
-angular.module('angular-client-side-auth')
+angular.module('uplifty')
 .factory('Users', function($http) {
     return {
         getAll: function(success, error) {
@@ -68,7 +68,7 @@ angular.module('angular-client-side-auth')
     };
 });
 
-angular.module('angular-client-side-auth')
+angular.module('uplifty')
 .factory('Statuses', function($http) {
     return {
         getAll: function(success, error) {

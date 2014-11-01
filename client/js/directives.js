@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('angular-client-side-auth')
+angular.module('uplifty')
 .directive('accessLevel', ['Auth', function(Auth) {
     return {
         restrict: 'A',
@@ -33,7 +33,7 @@ angular.module('angular-client-side-auth')
     };
 }]);
 
-angular.module('angular-client-side-auth').directive('activeNav', ['$location', function($location) {
+angular.module('uplifty').directive('activeNav', ['$location', function($location) {
     return {
         restrict: 'A',
         link: function(scope, element, attrs) {
