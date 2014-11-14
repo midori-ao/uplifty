@@ -10,8 +10,7 @@ var express  		    = require('express'),
     cookieSession 	= require('cookie-session'),
     session 		    = require('express-session'),
     redis 			    = require('redis'),
-    RedisStore 		  = require('connect-redis')(session),
-    csrf 			      = require('csurf');
+    RedisStore 		  = require('connect-redis')(session);
 
 var Config = require('./config/config.js');
 var app = module.exports = express();
@@ -46,25 +45,40 @@ app.use(session({
   secret: '1234567890QWERTY'
 }));
 
-var env = process.env.NODE_ENV || 'development';
-if ('development' === env || 'production' === env) {
-    app.use(csrf());
-    app.use(function(req, res, next) {
-        res.cookie('XSRF-TOKEN', req.csrfToken());
-        next();
-    });
-}
+app.post('/register', function(req,res){
+  var data = req.body;
+  console.log(data.username + ' ' + data.password);
+  res.send(data.username + ' ' + data.password);
+});
 
-//passport
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use(User.localStrategy);
-// passport.use(User.facebookStrategy());
-passport.serializeUser(User.serializeUser);
-passport.deserializeUser(User.deserializeUser);
+app.post('/login', function(req,res){
+  var data = req.body;
+  console.log(data.username + ' ' + data.password);
+  res.send(data.username + ' ' + data.password);
+});
 
-//routes
-require('./server/routes.js')(app);
+app.post('/logout', function(req,res){
+  res.send('logout page');
+});
+
+app.get('/users', function(req, res){
+  res.send('hello world');
+});
+
+app.get('/*', function(req,res){
+  res.send('any page');
+});
+
+// //passport
+// app.use(passport.initialize());
+// app.use(passport.session());
+// passport.use(User.localStrategy);
+// // passport.use(User.facebookStrategy());
+// passport.serializeUser(User.serializeUser);
+// passport.deserializeUser(User.deserializeUser);
+
+// //routes
+// require('./server/routes.js')(app);
 
 var port = Number(process.env.PORT || 8000);
 app.listen(port, function() {
