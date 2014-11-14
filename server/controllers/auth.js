@@ -1,62 +1,41 @@
-var passport = require('passport'),
-    User     = require('../api/User.js'),
-    Status   = require('../api/Status.js');
+var bcrypt = require('bcrypt-nodejs'),
+    mongoose = require('mongoose-q')(),
+    User = require('../models/UserSchema'),
+    Q = require('q');
 
-module.exports = {
-    register: function(req, res, next) {
-        try {
-            User.validate(req.body);
-        }
-        catch(err) {
-            return res.send(400, err.message);
-        }
+exports.register = function (username, password) {
+  var deferred = Q.defer(); 
+  var hash = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+  var user = {
+    "username": username,
+    "password": hash
+  };
+  //check if username is already assigned in our database
+  User.findOneQ({username: username})
+  .then(function (result){ //case in which user already exists in db
+    // console.log('result' + result.body);
+    console.log(result);
+    console.log('username already exists');
+    deferred.resolve(false); //username already exists
+  })
+  .fail(function (result) {//case in which user does not already exist in db
+      console.log(result.body);
+      if (result.body.message == 'The requested items could not be found.'){
+        console.log('Username is free for use');
 
-        User.addUser(req.body.username, req.body.password, req.body.role, function(err, user) {
-            if(err === 'UserAlreadyExists') return res.send(403, "User already exists");
-            else if(err)                    return res.send(500);
-
-            req.logIn(user, function(err) {
-                if(err)     { next(err); }
-                else        { res.json(200, { "role": user.role, "username": user.username }); }
-            });
+        user.saveQ()
+        .then(function(){
+            console.log('user saved!');
+            deferred.resolve(user);
+        })
+        .fail(function (err) {
+          console.log("PUT FAIL:" + err.body);
+          deferred.reject(new Error(err.body));
         });
-    },
+      } else {
+        deferred.reject(new Error(result.body));
+      }
+  });
 
-    login: function(req, res, next) {
-        passport.authenticate('local', function(err, user) {
-
-            if(err)     { return next(err); }
-            if(!user)   { return res.send(400); }
-
-
-            req.logIn(user, function(err) {
-                if(err) {
-                    return next(err);
-                }
-
-                if(req.body.rememberme) req.session.cookie.maxAge = 1000 * 60 * 60 * 24 * 7;
-                res.json(200, { "role": user.role, "username": user.username, "id": user._id });
-            });
-        })(req, res, next);
-    },
-
-    logout: function(req, res) {
-        req.logout();
-        res.send(200);
-    },
-
-    createStatus: function(req, res, next) {
-        //some auth here..
-        var json = req;
-        console.log('console out'+json);
-        Status.createStatus(req.body.username, req.body.id, req.body.category, req.body.text, function(err, status) {
-        // Status.createStatus(function(err, status) {
-            console.log(err);
-            if(err) { next(err); }
-            res.json(200, { "username": status.author.username, "id": status.id, "category": status.category, "text": status.text });
-
-            console.log('is this working? i dont know what im doing. what do');
-        });
-
-    }
+  return deferred.promise;
 };

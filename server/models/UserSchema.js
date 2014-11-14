@@ -10,6 +10,6 @@ var UserSchema = new mongoose.Schema({
 	categories: [],
 	email: 		{ type: String },
 	profile: 	{ type: String }
-});
+}, {collection: 'User'});
 
 module.exports = mongoose.model('User', UserSchema);
