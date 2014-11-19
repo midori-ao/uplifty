@@ -1,15 +1,11 @@
-var mongoose = require('mongoose'),
-	Config   = require('../../config/config.js');
+var mongoose = require('mongoose');
 
 //user
 var UserSchema = new mongoose.Schema({
-	id: 		{ type: String },
 	username:	{ type: String },
-	password:	{ type: String },
-	role: 		{},
-	categories: [],
-	email: 		{ type: String },
-	profile: 	{ type: String }
-}, {collection: 'User'});
+	password:	{ type: String }
+});
+
+UserSchema.set('collection', 'User');
 
 module.exports = mongoose.model('User', UserSchema);

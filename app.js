@@ -1,7 +1,7 @@
 var express  		    = require('express'),
     http	 		      = require('http'),
     path 	 		      = require('path'),
-    mongoose 		    = require('mongoose'),
+    mongoose        = require('mongoose'),
     passport		    = require('passport'),
     LocalStrategy   = require('passport-local'),
     morgan 			    = require('morgan'),
@@ -46,6 +46,8 @@ app.use(session({
   }),
   secret: '1234567890QWERTY'
 }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Passport session setup.
 passport.serializeUser(function(user, done) {
@@ -62,21 +64,23 @@ passport.deserializeUser(function(obj, done) {
 passport.use('local-register', new LocalStrategy(
   {passReqToCallback : true}, //allows us to pass back the request to the callback
   function(req, username, password, done) {
-    auth.register(username, password)
-    .then(function (user) {
-      if (user) {
+    // console.log(username);
+    // console.log(password);
+    auth.register(username, password, function(err,user){
+      if (err) throw (err);
+
+      if (user === "UserAlreadyExists") {
+        console.log("COULD NOT REGISTER");
+        req.session.error = 'That username is already in use, please try a different one.'; //inform user could not log them in
+        done(null, false);
+      }
+
+      else {
         console.log("REGISTERED: " + user.username);
         req.session.success = 'You are successfully registered and logged in ' + user.username + '!';
         done(null, user);
       }
-      if (!user) {
-        // console.log("COULD NOT REGISTER");
-        req.session.error = 'That username is already in use, please try a different one.'; //inform user could not log them in
-        done(null, user);
-      }
-    })
-    .fail(function (err){
-      console.log(err.body);
+
     });
   }
 ));
@@ -89,8 +93,8 @@ function ensureAuthenticated(req, res, next) {
 }
 
 app.post('/register', passport.authenticate('local-register', {
-  successRedirect: '/',
-  failureRedirect: '/signin'
+  successRedirect: '/success',
+  failureRedirect: '/failed'
   })
 );
 
@@ -108,20 +112,13 @@ app.get('/users', function(req, res){
   res.send('hello world');
 });
 
-app.get('/*', function(req,res){
-  res.send('any page');
+app.get('/success', function(req,res){
+  res.send('it was a success!');
+})
+
+app.get('/failed', function(req,res){
+  res.send('it faaailed!');
 });
-
-// //passport
-// app.use(passport.initialize());
-// app.use(passport.session());
-// passport.use(User.localStrategy);
-// // passport.use(User.facebookStrategy());
-// passport.serializeUser(User.serializeUser);
-// passport.deserializeUser(User.deserializeUser);
-
-// //routes
-// require('./server/routes.js')(app);
 
 var port = Number(process.env.PORT || 8000);
 app.listen(port, function() {
