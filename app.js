@@ -49,6 +49,23 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Session-persisted message middleware
+app.use(function(req, res, next){
+  var err = req.session.error,
+      msg = req.session.notice,
+      success = req.session.success;
+
+  delete req.session.error;
+  delete req.session.success;
+  delete req.session.notice;
+
+  if (err) res.locals.error = err;
+  if (msg) res.locals.notice = msg;
+  if (success) res.locals.success = success;
+
+  next();
+});
+
 // Passport session setup.
 passport.serializeUser(function(user, done) {
   console.log("serializing " + user.username);
@@ -63,11 +80,40 @@ passport.deserializeUser(function(obj, done) {
 // Use the LocalStrategy within Passport to Register/"signup" users.
 passport.use('local-register', new LocalStrategy(
   {passReqToCallback : true}, //allows us to pass back the request to the callback
+    function(req, username, password, done) {
+      // console.log(req.body.role);
+      // console.log(username);
+      // console.log(password);
+      auth.register(username, password, req.body.role, function(err,user){
+        console.log(err+' error here');
+        // if (err) throw err;
+
+        if (user === "UserAlreadyExists") {
+          console.log("COULD NOT REGISTER");
+          req.session.error = 'That username is already in use, please try a different one.'; //inform user could not log them in
+          done(null, false);
+        }
+
+        else {
+          console.log(user);
+          console.log("REGISTERED: " + user.username);
+          req.session.success = 'You are successfully registered and logged in ' + user.username + '!';
+          done(null, user);
+        }
+
+      });
+    }
+));
+
+// Use the LocalStrategy within Passport to Register/"signup" users.
+passport.use('local-auth', new LocalStrategy(
+  {passReqToCallback : true}, //allows us to pass back the request to the callback
   function(req, username, password, done) {
+    // console.log(req.body.role);
     // console.log(username);
     // console.log(password);
-    auth.register(username, password, function(err,user){
-      if (err) throw (err);
+    auth.login(username, password, function(err,user){
+      if (err) throw err;
 
       if (user === "UserAlreadyExists") {
         console.log("COULD NOT REGISTER");
@@ -76,6 +122,7 @@ passport.use('local-register', new LocalStrategy(
       }
 
       else {
+        console.log(user);
         console.log("REGISTERED: " + user.username);
         req.session.success = 'You are successfully registered and logged in ' + user.username + '!';
         done(null, user);
@@ -98,11 +145,15 @@ app.post('/register', passport.authenticate('local-register', {
   })
 );
 
-app.post('/login', function(req,res){
-  var data = req.body;
-  console.log(data.username + ' ' + data.password);
-  res.send(data.username + ' ' + data.password);
-});
+app.post('/login', passport.authenticate('local-login', {
+  successRedirect: '/success',
+  failureRedirect: '/failed'
+  })
+  
+  // var data = req.body;
+  // console.log(data.username + ' ' + data.password);
+  // res.send(data.username + ' ' + data.password);
+);
 
 app.post('/logout', function(req,res){
   res.send('logout page');
