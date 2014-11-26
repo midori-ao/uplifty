@@ -30,8 +30,7 @@ angular.module('MyApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ngStra
               return $location.path('/login');
             }
           }
-        },
-        access: 'admin'
+        }
       });
 
     $urlRouterProvider.otherwise('/');
