@@ -6,14 +6,12 @@ Uplifty
 
 Uplifty is an application that allows users to create their own statuses, and send positive thoughts to others by clicking on multiple Facebook-style "like" buttons.
 
-[Demo](https://uplifty.herokuapp.com/)
+[Demo](https://uplifty.herokuapp.com/) (old version)
 
 ## Usage
 
-`npm install & npm app.js`
+`npm install & npm server.js`
 
 ## Credits
 
-Fnakstad - for the substantial portion of the app with the angular role authentication: https://github.com/fnakstad/angular-client-side-auth/
-
-jkvoorhis - for the node server side structure: https://github.com/jkvoorhis/userAuth
+Sahat - for the substantial portion of the app with the node/angular authentication: https://github.com/sahat/satellizer/
