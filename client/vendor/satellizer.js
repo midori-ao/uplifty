@@ -151,6 +151,12 @@ angular.module('satellizer')
         }
       };
 
+      shared.setRole = function(response) {
+
+        $window.localStorage['role'] = response;
+
+      };
+
       shared.isAuthenticated = function() {
         var tokenName = config.tokenPrefix ? config.tokenPrefix + '_' + config.tokenName : config.tokenName;
         var token = $window.localStorage[tokenName];
@@ -269,6 +275,7 @@ angular.module('satellizer')
         };
 
         $auth.login = function(user) {
+          console.log('auth login '+ user.email);
           return local.login(user);
         };
 
@@ -404,7 +411,9 @@ angular.module('satellizer')
       local.login = function(user) {
         return $http.post(config.loginUrl, user)
           .then(function(response) {
+            console.log('response role '+ JSON.stringify(response.data.role));
             shared.setToken(response);
+            shared.setRole(response.data.role);
             return response;
           });
       };

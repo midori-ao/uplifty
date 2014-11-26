@@ -7,6 +7,7 @@ angular.module('MyApp')
     $scope.getProfile = function() {
       Account.getProfile()
         .success(function(data) {
+          console.log(data);
           $scope.user = data;
         })
         .error(function(error) {
