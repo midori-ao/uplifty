@@ -1,11 +1,14 @@
 module.exports = {
-
-	mongo: {
-		address: 'mongodb://alexzkazu:uplifty@ds047440.mongolab.com:47440/uplifty'
-	},
-	redis: {
-		host: 'pub-redis-14532.eu-west-1-1.2.ec2.garantiadata.com',
-		port: 14532,
-		pass: 'test-rd'
-	}
+  TOKEN_SECRET: process.env.TOKEN_SECRET || 'LOLSTRINGHAHAA',
+  MONGO_URI: process.env.MONGO_URI || 'mongodb://alexzkazu:uplifty@ds047440.mongolab.com:47440/uplifty',
+  FACEBOOK_SECRET: process.env.FACEBOOK_SECRET || 'Facebook App Secret',
+  FOURSQUARE_SECRET: process.env.FOURSQUARE_SECRET || 'Foursquare Client Secret',
+  GOOGLE_SECRET: process.env.GOOGLE_SECRET || 'Google Client Secret',
+  GITHUB_SECRET: process.env.GITHUB_SECRET || 'GitHub Client Secret',
+  LINKEDIN_SECRET: process.env.LINKEDIN_SECRET || 'LinkedIn Client Secret',
+  WINDOWS_LIVE_SECRET: process.env.WINDOWS_LIVE_SECRET || 'Windows Live Secret',
+  TWITTER_KEY: process.env.TWITTER_KEY || 'Twitter Consumer Key',
+  TWITTER_SECRET: process.env.TWITTER_SECRET || 'Twitter Consumer Secret',
+  TWITTER_CALLBACK: process.env.TWITTER_CALLBACK || 'Twitter Callback Url',
+  YAHOO_SECRET: process.env.YAHOO_SECRET || 'Yahoo Client Secret'
 };
