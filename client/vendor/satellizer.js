@@ -175,6 +175,15 @@ angular.module('satellizer')
         return false;
       };
 
+      shared.isAdmin = function() {
+        if ($window.localStorage['role'] ==='admin') {
+          console.log('is admin'); 
+          return true;
+        } else {
+          return false;
+        }
+      };
+
       shared.logout = function() {
         var tokenName = config.tokenPrefix ? config.tokenPrefix + '_' + config.tokenName : config.tokenName;
         delete $window.localStorage[tokenName];
@@ -289,6 +298,10 @@ angular.module('satellizer')
 
         $auth.isAuthenticated = function() {
           return shared.isAuthenticated();
+        };
+
+        $auth.isAdmin = function(){
+          return shared.isAdmin();
         };
 
         $auth.link = function(name, userData) {

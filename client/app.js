@@ -31,6 +31,23 @@ angular.module('MyApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ngStra
             }
           }
         }
+      })
+      .state('admin', {
+        url: '/admin',
+        templateUrl: 'partials/admin.html',
+        controller: 'AdminCtrl',
+        resolve: {
+          authenticated: function($location, $auth) {
+            if (!$auth.isAuthenticated()) {
+              return $location.path('/login');
+            }
+          },
+          adminfilter: function($location,$auth) {
+            if (!$auth.isAdmin()){
+              return $location.path('/login');
+            }
+          }
+        }
       });
 
     $urlRouterProvider.otherwise('/');

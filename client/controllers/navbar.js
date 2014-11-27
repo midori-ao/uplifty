@@ -3,4 +3,7 @@ angular.module('MyApp')
     $scope.isAuthenticated = function() {
       return $auth.isAuthenticated();
     };
+    $scope.isAdmin = function() {
+      return $auth.isAdmin();
+    }
   });
