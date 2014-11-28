@@ -117,7 +117,7 @@ angular.module('satellizer')
     '$window',
     '$location',
     'satellizer.config',
-    function($q, $window, $location, config) {
+    function($q, $window, $location, config, $auth) {
       var shared = {};
 
       shared.getToken = function() {
@@ -151,12 +151,6 @@ angular.module('satellizer')
         }
       };
 
-      shared.setRole = function(response) {
-
-        $window.localStorage['role'] = response;
-
-      };
-
       shared.isAuthenticated = function() {
         var tokenName = config.tokenPrefix ? config.tokenPrefix + '_' + config.tokenName : config.tokenName;
         var token = $window.localStorage[tokenName];
@@ -175,13 +169,30 @@ angular.module('satellizer')
         return false;
       };
 
-      shared.isAdmin = function() {
-        if ($window.localStorage['role'] ==='admin') {
-          console.log('is admin'); 
-          return true;
-        } else {
-          return false;
+      shared.isAdmin = function(role) {
+        // console.log(role); triggers 3 times fix
+        if (role === 'admin') {return true;}
+        return false;
+      };
+
+      shared.compareRole = function (state) {
+
+        var tokenName = config.tokenPrefix ? config.tokenPrefix + '_' + config.tokenName : config.tokenName;
+        var token = $window.localStorage[tokenName];
+
+        if (token) {
+          if (token.split('.').length === 3) {
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace('-', '+').replace('_', '/');
+            var role = JSON.parse($window.atob(base64)).role;
+            
+            // console.log('role '+role); triggers 3 times, even more. fix
+
+            if (state === role) { return true; }
+          }
         }
+        return false;
+
       };
 
       shared.logout = function() {
@@ -292,6 +303,10 @@ angular.module('satellizer')
           return local.signup(user);
         };
 
+        $auth.compareRole = function(state) {
+          return shared.compareRole(state);
+        };
+
         $auth.logout = function() {
           return shared.logout();
         };
@@ -300,8 +315,8 @@ angular.module('satellizer')
           return shared.isAuthenticated();
         };
 
-        $auth.isAdmin = function(){
-          return shared.isAdmin();
+        $auth.isAdmin = function(role){
+          return shared.isAdmin(role);
         };
 
         $auth.link = function(name, userData) {
@@ -424,9 +439,7 @@ angular.module('satellizer')
       local.login = function(user) {
         return $http.post(config.loginUrl, user)
           .then(function(response) {
-            console.log('response role '+ JSON.stringify(response.data.role));
             shared.setToken(response);
-            shared.setRole(response.data.role);
             return response;
           });
       };

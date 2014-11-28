@@ -55,12 +55,15 @@ function ensureAuthenticated(req, res, next) {
  | Generate JSON Web Token
  |--------------------------------------------------------------------------
  */
+
 function createToken(user) {
   var payload = {
     sub: user._id,
     iat: moment().unix(),
-    exp: moment().add(14, 'days').unix()
+    exp: moment().add(14, 'days').unix(),
+    role: user.role
   };
+
   return jwt.encode(payload, config.TOKEN_SECRET);
 }
 
@@ -108,7 +111,7 @@ app.post('/auth/login', function(req, res) {
       if (!isMatch) {
         return res.status(401).send({ message: 'Wrong email and/or password' });
       }
-      res.send({ role: user.role, token: createToken(user) });
+      res.send({ token: createToken(user) });
     });
   });
 });

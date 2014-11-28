@@ -37,17 +37,13 @@ angular.module('MyApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ngStra
         templateUrl: 'partials/admin.html',
         controller: 'AdminCtrl',
         resolve: {
-          authenticated: function($location, $auth) {
+          authenticated: function($location, $auth, $state) {
             if (!$auth.isAuthenticated()) {
               return $location.path('/login');
             }
-          },
-          adminfilter: function($location,$auth) {
-            if (!$auth.isAdmin()){
-              return $location.path('/login');
-            }
           }
-        }
+        },
+        access: 'admin'
       });
 
     $urlRouterProvider.otherwise('/');
@@ -65,10 +61,10 @@ angular.module('MyApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ngStra
     });
 
   })
-.run(['$rootScope', 'Account', '$state', function($rootScope, Account, $state){
+  .run(['$rootScope', 'Account', '$state', '$auth', function($rootScope, Account, $state, $auth){
   $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
         if (toState.access) { // check if the route has an access:something.
-            if (Account.getPermission() != toState.access) {
+            if (!$auth.compareRole(toState.access)) {
                 event.preventDefault();
                 $state.go('login');
             }

@@ -20,7 +20,7 @@
   <ul class="nav navbar-nav">
     <li><a href="/#/">Home</a></li>
     <li ng-if="isAuthenticated()"><a href="/#/profile">Profile</a></li>
-    <li ng-if="isAdmin()"><a href="/#/admin">Admin</a></li>
+    <li ng-if="isAuthenticated() && isAdmin() "><a href="/#/admin">Admin</a></li>
   </ul>
   <ul ng-if="!isAuthenticated()" class="nav navbar-nav pull-right">
     <li><a href="/#/login">Login</a></li>

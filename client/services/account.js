@@ -6,16 +6,6 @@ angular.module('MyApp')
       },
       updateProfile: function(profileData) {
         return $http.put('/api/me', profileData);
-      },
-      getPermission: function () {
-        console.log('triggered');
-        if ($window.localStorage['role']) {
-          console.log('success'); 
-          return $window.localStorage.getItem('role');
-        }
-        else
-          console.log('fail');
-          return false;
       }
     };
   });
