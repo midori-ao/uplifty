@@ -10,6 +10,7 @@ var jwt = require('jwt-simple');
 var moment = require('moment');
 var mongoose = require('mongoose');
 var request = require('request');
+var _ = require('underscore');
 
 var config = require('./config/config');
 var User = require('./server/models/UserSchema');
@@ -66,6 +67,24 @@ function createToken(user) {
 
   return jwt.encode(payload, config.TOKEN_SECRET);
 }
+
+/*
+ |--------------------------------------------------------------------------
+ | GET /api/users
+ |--------------------------------------------------------------------------
+ */
+app.get('/api/users', function(req, res) {
+    var users = User.find({}, function(err, users) {
+      if (err) return res.status(400).send({ message: 'Users dont exist' });
+        _.each(users, function(user) {
+            delete user.password;
+            delete user.facebook;
+            delete user.linkedin;
+            delete user.twitter;
+    });
+    res.send(users);
+  });
+});
 
 /*
  |--------------------------------------------------------------------------
@@ -129,7 +148,8 @@ app.post('/auth/signup', function(req, res) {
     var user = new User({
       displayName: req.body.displayName,
       email: req.body.email,
-      password: req.body.password
+      password: req.body.password,
+      role: req.body.role
     });
     user.save(function() {
       res.send({ token: createToken(user) });

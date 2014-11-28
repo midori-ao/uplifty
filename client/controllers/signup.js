@@ -4,7 +4,8 @@ angular.module('MyApp')
       $auth.signup({
         displayName: $scope.displayName,
         email: $scope.email,
-        password: $scope.password
+        password: $scope.password,
+        role: "user"
       }).catch(function(response) {
         $alert({
           content: response.data.message,

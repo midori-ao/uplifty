@@ -1,14 +1,11 @@
 angular.module('MyApp')
-  .controller('AdminCtrl', function($scope, $auth, $alert, Account) {
+  .controller('AdminCtrl', function($scope, $auth, $alert, Account, Admin, $location) {
 
-    /**
-     * Get user's profile information.
-     */
-    $scope.getProfile = function() {
-      Account.getProfile()
-        .success(function(data) {
-          console.log(data);
-          $scope.user = data;
+    $scope.loading = true;
+    Admin.getUsers()
+      .success(function(data) {
+          $scope.users = data;
+          $scope.loading = false;
         })
         .error(function(error) {
           $alert({
@@ -17,9 +14,32 @@ angular.module('MyApp')
             type: 'material',
             duration: 3
           });
+          $scope.loading = false;
         });
-    };
 
+
+    /**
+     * Create user from Admin panel.
+     */
+    $scope.createAccount = function() {
+      Admin.createAccount({
+        displayName: $scope.displayName,
+        email: $scope.email,
+        password: $scope.password,
+        role: $scope.role
+      })
+      .then(function(){ //find a better way to refresh view after submission
+        $location.path('/admin');
+      })
+      .catch(function(response) {
+        $alert({
+          content: response.data.message,
+          animation: 'fadeZoomFadeDown',
+          type: 'material',
+          duration: 3
+        });
+      });
+    };
 
     /**
      * Update user's profile information.
@@ -37,59 +57,5 @@ angular.module('MyApp')
         });
       });
     };
-
-    /**
-     * Link third-party provider.
-     */
-    $scope.link = function(provider) {
-      $auth.link(provider)
-        .then(function() {
-          $alert({
-            content: 'You have successfully linked ' + provider + ' account',
-            animation: 'fadeZoomFadeDown',
-            type: 'material',
-            duration: 3
-          });
-        })
-        .then(function() {
-          $scope.getProfile();
-        })
-        .catch(function(response) {
-          $alert({
-            content: response.data.message,
-            animation: 'fadeZoomFadeDown',
-            type: 'material',
-            duration: 3
-          });
-        });
-    };
-
-    /**
-     * Unlink third-party provider.
-     */
-    $scope.unlink = function(provider) {
-      $auth.unlink(provider)
-        .then(function() {
-          $alert({
-            content: 'You have successfully unlinked ' + provider + ' account',
-            animation: 'fadeZoomFadeDown',
-            type: 'material',
-            duration: 3
-          });
-        })
-        .then(function() {
-          $scope.getProfile();
-        })
-        .catch(function(response) {
-          $alert({
-            content: response.data ? response.data.message : 'Could not unlink ' + provider + ' account',
-            animation: 'fadeZoomFadeDown',
-            type: 'material',
-            duration: 3
-          });
-        });
-    };
-
-    $scope.getProfile();
 
   });
