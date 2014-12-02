@@ -2,20 +2,24 @@ angular.module('MyApp')
   .controller('AdminCtrl', function($scope, $auth, $alert, Account, Admin, $location) {
 
     $scope.loading = true;
+
+    /**
+     * Get all users in the DB
+     */
     Admin.getUsers()
       .success(function(data) {
           $scope.users = data;
           $scope.loading = false;
-        })
-        .error(function(error) {
-          $alert({
-            content: error.message,
-            animation: 'fadeZoomFadeDown',
-            type: 'material',
-            duration: 3
-          });
-          $scope.loading = false;
+      })
+      .error(function(error) {
+        $alert({
+          content: error.message,
+          animation: 'fadeZoomFadeDown',
+          type: 'material',
+          duration: 3
         });
+        $scope.loading = false;
+      });
 
 
     /**

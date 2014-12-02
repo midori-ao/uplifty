@@ -20,7 +20,6 @@ angular.module('MyApp')
         });
     };
 
-
     /**
      * Update user's profile information.
      */

@@ -73,7 +73,7 @@ function createToken(user) {
  | GET /api/users
  |--------------------------------------------------------------------------
  */
-app.get('/api/users', function(req, res) {
+app.get('/api/users', ensureAuthenticated, function(req, res) {
     var users = User.find({}, function(err, users) {
       if (err) return res.status(400).send({ message: 'Users dont exist' });
         _.each(users, function(user) {
