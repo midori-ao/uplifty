@@ -32,6 +32,18 @@ angular.module('MyApp', ['ngResource', 'ngMessages', 'ui.router', 'mgcrea.ngStra
           }
         }
       })
+      .state('statuses', {
+        url: '/statuses',
+        templateUrl: 'partials/statuses.html',
+        controller: 'StatusCtrl',
+        resolve: {
+          authenticated: function($location, $auth) {
+            if (!$auth.isAuthenticated()) {
+              return $location.path('/login');
+            }
+          }
+        }
+      })
       .state('admin', {
         url: '/admin',
         templateUrl: 'partials/admin.html',

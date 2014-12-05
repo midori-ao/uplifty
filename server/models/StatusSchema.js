@@ -1,18 +1,17 @@
-var mongoose = require('mongoose'),
-	Config   = require('../../config/config.js');
+var mongoose = require('mongoose');
 
 //status
 
-var StatusSchema = new mongoose.Schema({
-	id: 		{ type: Number },
+var statusSchema = new mongoose.Schema({
 	author:     {
 		id: 	{ type: String },
 		username: { type: String }
 	},
 	date: 		{ type: String },
-	// likes: 		[],
 	category: 	{ type: String },
 	text:		{ type: String }
 });
 
-module.exports = mongoose.model('Status', StatusSchema);
+statusSchema.set('collection', 'Status');
+
+module.exports = mongoose.model('Status', statusSchema);

@@ -14,6 +14,7 @@ var _ = require('underscore');
 
 var config = require('./config/config');
 var User = require('./server/models/UserSchema');
+var Status = require('./server/models/StatusSchema');
 
 mongoose.connect(config.MONGO_URI);
 
@@ -85,6 +86,49 @@ app.get('/api/users', ensureAuthenticated, function(req, res) {
     res.send(users);
   });
 });
+
+/*
+ |--------------------------------------------------------------------------
+ | GET /api/statuses
+ |--------------------------------------------------------------------------
+ */
+app.get('/api/statuses', ensureAuthenticated, function(req, res) {
+    Status.find({}, function(err, statuses) {
+      if (err) return res.status(400).send({ message: 'Statuses dont exist' });
+      res.send(statuses);
+    });
+});
+
+/*
+ |--------------------------------------------------------------------------
+ | POST /api/postStatus
+ |--------------------------------------------------------------------------
+ */
+// app.post('/api/postStatus', ensureAuthenticated, function(req, res) {
+//     Status.find({}, function(err, statuses){
+//                 if (err) return console.log(err);
+//                 var maxid = parseInt(_.max(statuses, function(status) { return status.id; }).id) + 1 || 1;             
+//                 // Status.findOne({'username': username}, function(err, status) {
+//                     // if (status) if (status.username == username)  return callback("StatusAlreadyExists");
+//                     var status2 = {
+//                         id:         maxid,
+//                         author:     {
+//                             id: id,
+//                             username: username
+//                         },
+//                         date:       'test',
+//                         category:   category,
+//                         // likes:      'a',
+//                         text:       text
+//                     };
+
+//                     Status.create(status2, function (err) {
+//                         if (err) return console.log(err);
+//                         callback(null, status2);
+//                     });
+//                             // });
+//         });
+// });
 
 /*
  |--------------------------------------------------------------------------

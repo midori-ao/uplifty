@@ -1,0 +1,52 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">Post Status</div>
+        <div class="panel-body">
+          <form method="post" ng-submit="updateProfile()">
+            <div class="form-group">
+              <label class="control-label"><i class="ion-person"></i> Status Text</label>
+              <textarea rows="3" class="form-control" ng-model="status.text"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="control-label"><i class="ion-at"></i> Email Address</label>
+              <input type="email" class="form-control" ng-model="user.email" />
+            </div>
+            <button class="btn btn-lg btn-success">Post Status</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-8">
+
+      <div class="panel panel-default">
+        <div class="panel-heading">All Statuses</div>
+        <div class="panel-body">
+          <table class="table table-striped" data-ng-hide="loading">
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Date</th>
+                  <th>Category</th>
+                  <th>Text</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-ng-repeat="status in statuses">
+                  <td>{{status.author.username}}</td>
+                  <td>{{status.date}}</td>
+                  <td>{{status.category}}</td>
+                  <td>{{status.text}}</td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+      </div>
+
+
+    </div>
+
+  </div>
+</div>
