@@ -198,6 +198,7 @@ angular.module('satellizer')
       shared.logout = function() {
         var tokenName = config.tokenPrefix ? config.tokenPrefix + '_' + config.tokenName : config.tokenName;
         delete $window.localStorage[tokenName];
+        delete $window.localStorage['user'];
 
         if (config.logoutRedirect) {
           $location.path(config.logoutRedirect);
@@ -433,12 +434,15 @@ angular.module('satellizer')
     'satellizer.utils',
     'satellizer.shared',
     'satellizer.config',
-    function($q, $http, $location, utils, shared, config) {
+    '$rootScope',
+    '$window',
+    function($q, $http, $location, utils, shared, config, $rootScope, $window) {
       var local = {};
 
       local.login = function(user) {
         return $http.post(config.loginUrl, user)
           .then(function(response) {
+            $window.localStorage['user']= JSON.stringify(response.data.user);
             shared.setToken(response);
             return response;
           });
@@ -448,6 +452,7 @@ angular.module('satellizer')
         return $http.post(config.signupUrl, user)
           .then(function(response) {
             if (config.loginOnSignup) {
+              $window.localStorage['user']= JSON.stringify(response.data.user);
               shared.setToken(response);
             } else {
               $location.path(config.signupRedirect);

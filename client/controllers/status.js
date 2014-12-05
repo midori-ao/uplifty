@@ -1,10 +1,13 @@
 angular.module('MyApp')
-  .controller('StatusCtrl', function($scope, $auth, $alert, Account, Status, $location) {
+  .controller('StatusCtrl', function($scope, $rootScope, $auth, $alert, Account, Status, $location, $window) {
 
+    var user = JSON.parse($window.localStorage.user);
+
+    $scope.username = user.displayName;
     $scope.loading = true;
 
     /**
-     * Get all users in the DB
+     * Get all statuses from the DB
      */
     Status.getStatuses()
       .success(function(data) {
@@ -23,26 +26,28 @@ angular.module('MyApp')
 
 
     /**
-     * Create user from Admin panel.
+     * Create status
      */
-    // $scope.createStatus = function() {
-    //   Status.postStatus({
-    //     displayName: $scope.displayName,
-    //     email: $scope.email,
-    //     password: $scope.password,
-    //     role: $scope.role
-    //   })
-    //   .then(function(){ //find a better way to refresh view after submission
-    //     $location.path('/statuses');
-    //   })
-    //   .catch(function(response) {
-    //     $alert({
-    //       content: response.data.message,
-    //       animation: 'fadeZoomFadeDown',
-    //       type: 'material',
-    //       duration: 3
-    //     });
-    //   });
-    // };
+    $scope.createStatus = function() {
+      Status.postStatus({
+        id: user.id,
+        displayName: user.displayName,
+        category: $scope.status.category,
+        text: $scope.status.text
+      })
+      .success(function(){ //find a better way to refresh view after submission
+        if(!$rootScope.$$phase) {
+        $rootScope.$apply();
+        }
+      })
+      .catch(function(response) {
+        $alert({
+          content: response.data.message,
+          animation: 'fadeZoomFadeDown',
+          type: 'material',
+          duration: 3
+        });
+      });
+    };
 
   });

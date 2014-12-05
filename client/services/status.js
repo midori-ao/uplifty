@@ -1,5 +1,5 @@
 angular.module('MyApp')
-  .factory('Status', function($http, $auth, $window) {
+  .factory('Status', function($http, $auth) {
     return {
       getStatuses: function() {
         return $http.get('/api/statuses');

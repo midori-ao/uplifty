@@ -104,31 +104,31 @@ app.get('/api/statuses', ensureAuthenticated, function(req, res) {
  | POST /api/postStatus
  |--------------------------------------------------------------------------
  */
-// app.post('/api/postStatus', ensureAuthenticated, function(req, res) {
-//     Status.find({}, function(err, statuses){
-//                 if (err) return console.log(err);
-//                 var maxid = parseInt(_.max(statuses, function(status) { return status.id; }).id) + 1 || 1;             
-//                 // Status.findOne({'username': username}, function(err, status) {
-//                     // if (status) if (status.username == username)  return callback("StatusAlreadyExists");
-//                     var status2 = {
-//                         id:         maxid,
-//                         author:     {
-//                             id: id,
-//                             username: username
-//                         },
-//                         date:       'test',
-//                         category:   category,
-//                         // likes:      'a',
-//                         text:       text
-//                     };
+app.post('/api/postStatus', ensureAuthenticated, function(req, res) {
+  var data = req.body;
+    Status.find({}, function(err, statuses){
+      if (err) return res.status(401).send({ message: 'Statuses dont exist' }); //is this error correct?
+      var maxid = parseInt(_.max(statuses, function(status) { return status.id; }).id) + 1 || 1;             
+        // Status.findOne({'username': username}, function(err, status) {
+        //   if (status) if (status.username == username)  return callback("StatusAlreadyExists");
+          var status2 = {
+              id:         maxid,
+              author:     {
+                  id: data.id,
+                  username: data.displayName
+              },
+              date:       'test',
+              category:   data.category,
+              text:       data.text
+          };
 
-//                     Status.create(status2, function (err) {
-//                         if (err) return console.log(err);
-//                         callback(null, status2);
-//                     });
-//                             // });
-//         });
-// });
+          Status.create(status2, function (err) {
+              if (err) return res.status(401).send({ message: 'Error creating status' });
+              res.send('yes');
+          });
+        // });
+    });
+});
 
 /*
  |--------------------------------------------------------------------------
@@ -174,7 +174,8 @@ app.post('/auth/login', function(req, res) {
       if (!isMatch) {
         return res.status(401).send({ message: 'Wrong email and/or password' });
       }
-      res.send({ token: createToken(user) });
+      var modified = { id: user._id, displayName: user.displayName, email: user.email };
+      res.send({ user: modified, token: createToken(user) });
     });
   });
 });

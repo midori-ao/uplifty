@@ -4,14 +4,18 @@
       <div class="panel panel-default">
         <div class="panel-heading">Post Status</div>
         <div class="panel-body">
-          <form method="post" ng-submit="updateProfile()">
+          <form method="post" ng-submit="createStatus()">
+            <div>
+              <label class="control-label"><i class="ion-person"></i> Username: </label>
+              <span> {{ username }}</span>
+            </div>
             <div class="form-group">
               <label class="control-label"><i class="ion-person"></i> Status Text</label>
               <textarea rows="3" class="form-control" ng-model="status.text"></textarea>
             </div>
             <div class="form-group">
-              <label class="control-label"><i class="ion-at"></i> Email Address</label>
-              <input type="email" class="form-control" ng-model="user.email" />
+              <label class="control-label"><i class="ion-at"></i> Category </label>
+              <input type="text" class="form-control" ng-model="status.category" />
             </div>
             <button class="btn btn-lg btn-success">Post Status</button>
           </form>
