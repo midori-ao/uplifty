@@ -35,6 +35,7 @@
                   <th>Date</th>
                   <th>Category</th>
                   <th>Text</th>
+                  <th>Likes</th>
                 </tr>
               </thead>
               <tbody>
@@ -43,6 +44,7 @@
                   <td>{{status.date}}</td>
                   <td>{{status.category}}</td>
                   <td>{{status.text}}</td>
+                  <td><div class="profile-icons" ng-repeat="user in status.likes"><img ng-src="http://localhost:3000/images/profiles/{{user.userId}}.jpg" width="25" height="25"></div></td>
                 </tr>
               </tbody>
             </table>

@@ -32,6 +32,7 @@ if (app.get('env') === 'production') {
     protocol == 'https' ? next() : res.redirect('https://' + req.hostname + req.url);
   });
 }
+app.use(express.static(path.join(__dirname, './public')));
 app.use(express.static(path.join(__dirname, './client')));
 
 /*
@@ -135,7 +136,7 @@ app.post('/api/postStatus', ensureAuthenticated, function(req, res) {
  | PUT /api/giveLike
  |--------------------------------------------------------------------------
  */
-app.put('/api/giveLike', function(req, res) {
+app.put('/api/addLike', function(req, res) {
   var data = req.body;
     Status.find({}, function(err, statuses){
       if (err) return res.status(401).send({ message: 'Statuses dont exist' }); //is this error correct? 
@@ -154,7 +155,7 @@ app.put('/api/giveLike', function(req, res) {
                 res.status(200).send(model);
             }
         );
-        
+
     });
 });
 
