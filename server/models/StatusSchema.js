@@ -9,7 +9,13 @@ var statusSchema = new mongoose.Schema({
 	},
 	date: 		{ type: String },
 	category: 	{ type: String },
-	text:		{ type: String }
+	text:		{ type: String },
+	likes: 		[
+					{
+						userId: { type: String },
+						type: { type: String } 
+					}
+				]
 });
 
 statusSchema.set('collection', 'Status');

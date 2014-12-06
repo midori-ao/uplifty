@@ -132,6 +132,62 @@ app.post('/api/postStatus', ensureAuthenticated, function(req, res) {
 
 /*
  |--------------------------------------------------------------------------
+ | PUT /api/giveLike
+ |--------------------------------------------------------------------------
+ */
+app.put('/api/giveLike', function(req, res) {
+  var data = req.body;
+    Status.find({}, function(err, statuses){
+      if (err) return res.status(401).send({ message: 'Statuses dont exist' }); //is this error correct? 
+
+        var addItem = {
+            userId: data.userId,
+            type: data.type
+        };
+
+        Status.findByIdAndUpdate(
+            data.id,
+            {$push: {"likes": addItem}},
+            {},
+            function(err, model) {
+                if (err) return res.status(401).send({message: 'Failed to add like'});
+                res.status(200).send(model);
+            }
+        );
+        
+    });
+});
+
+/*
+ |--------------------------------------------------------------------------
+ | PUT /api/removeLike
+ |--------------------------------------------------------------------------
+ */
+app.put('/api/removeLike', function(req, res) {
+  var data = req.body;
+    Status.find({}, function(err, statuses){
+      if (err) return res.status(401).send({ message: 'Statuses dont exist' }); //is this error correct? 
+
+        var removeItem = {
+            userId: data.userId,
+            type: data.type
+        };
+
+        Status.findByIdAndUpdate(
+            data.id,
+            {$pull: {"likes": removeItem}},
+            {},
+            function(err, model) {
+                if (err) return res.status(401).send({message: 'Failed to remove like'});
+                res.status(200).send(model);
+            }
+        );
+
+    });
+});
+
+/*
+ |--------------------------------------------------------------------------
  | GET /api/me
  |--------------------------------------------------------------------------
  */
