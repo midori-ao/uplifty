@@ -44,6 +44,7 @@ function ensureAuthenticated(req, res, next) {
   if (!req.headers.authorization) {
     return res.status(401).send({ message: 'Please make sure your request has an Authorization header' });
   }
+  console.log(req.headers.authorization);
   var token = req.headers.authorization.split(' ')[1];
   var payload = jwt.decode(token, config.TOKEN_SECRET);
   if (payload.exp <= moment().unix()) {

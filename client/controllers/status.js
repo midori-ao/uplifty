@@ -50,4 +50,32 @@ angular.module('MyApp')
       });
     };
 
+    $scope.addLike = function(statusId, userId, type){
+      console.log(statusId + userId + type);
+      // Status.addLike({
+      // })
+      // .catch(function(response) {
+      //   $alert({
+      //     content: response.data.message,
+      //     animation: 'fadeZoomFadeDown',
+      //     type: 'material',
+      //     duration: 3
+      //   });
+      // });
+    };
+
+    $scope.removeLike = function(data){
+      console.log(data);
+      // Status.removeLike({
+      // })
+      // .catch(function(response) {
+      //   $alert({
+      //     content: response.data.message,
+      //     animation: 'fadeZoomFadeDown',
+      //     type: 'material',
+      //     duration: 3
+      //   });
+      // });
+    };
+
   });

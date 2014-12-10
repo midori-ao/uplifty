@@ -6,6 +6,12 @@ angular.module('MyApp')
       },
       postStatus: function(statusData) {
         return $http.post('/api/postStatus', statusData);
+      },
+      addLike: function(data){
+        return $http.put('/api/addLike', data);
+      },
+      removeLike: function(data){
+        return $http.put('/api/removeLike', data);
       }
     };
   });

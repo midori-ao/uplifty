@@ -1,6 +1,11 @@
 {
   "name": "uplifty",
   "version": "0.0.0",
+  "scripts": {
+    "test": "npm run unit && npm run cov",
+    "unit": "mocha -R spec",
+    "cov": "mocha -r blanket -R travis-cov"
+  },
   "dependencies": {
     "async": "^0.9.0",
     "bcryptjs": "^0.7.12",
@@ -17,5 +22,10 @@
   "engines": {
     "node": "0.10.31",
     "npm": "1.4.24"
+  },
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "mocha": "^2.0.1",
+    "nock": "^0.51.0"
   }
 }
