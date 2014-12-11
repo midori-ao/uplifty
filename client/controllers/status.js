@@ -2,7 +2,7 @@ angular.module('MyApp')
   .controller('StatusCtrl', function($scope, $rootScope, $auth, $alert, Account, Status, $location, $window) {
 
     var user = JSON.parse($window.localStorage.user);
-
+    $scope.currentUserId = user.id;
     $scope.username = user.displayName;
     $scope.loading = true;
 
@@ -12,6 +12,7 @@ angular.module('MyApp')
     Status.getStatuses()
       .success(function(data) {
           $scope.statuses = data;
+          console.log(data);
           $scope.loading = false;
       })
       .error(function(error) {
@@ -51,31 +52,37 @@ angular.module('MyApp')
     };
 
     $scope.addLike = function(statusId, userId, type){
-      console.log(statusId + userId + type);
-      // Status.addLike({
-      // })
-      // .catch(function(response) {
-      //   $alert({
-      //     content: response.data.message,
-      //     animation: 'fadeZoomFadeDown',
-      //     type: 'material',
-      //     duration: 3
-      //   });
-      // });
+      console.log(statusId + ' ' + userId + ' ' + type);
+      Status.addLike({
+        id: statusId,
+        userId: userId,
+        type: type
+      })
+      .catch(function(response) {
+        $alert({
+          content: response.data.message,
+          animation: 'fadeZoomFadeDown',
+          type: 'material',
+          duration: 3
+        });
+      });
     };
 
-    $scope.removeLike = function(data){
-      console.log(data);
-      // Status.removeLike({
-      // })
-      // .catch(function(response) {
-      //   $alert({
-      //     content: response.data.message,
-      //     animation: 'fadeZoomFadeDown',
-      //     type: 'material',
-      //     duration: 3
-      //   });
-      // });
+    $scope.removeLike = function(statusId, userId, type){
+      console.log(statusId + ' ' + userId + ' ' + type);
+      Status.removeLike({
+        id: statusId,
+        userId: userId,
+        type: type
+      })
+      .catch(function(response) {
+        $alert({
+          content: response.data.message,
+          animation: 'fadeZoomFadeDown',
+          type: 'material',
+          duration: 3
+        });
+      });
     };
 
   });
