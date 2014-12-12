@@ -1,5 +1,7 @@
 angular.module('MyApp')
-  .controller('ProfileCtrl', function($scope, $auth, $alert, Account) {
+  .controller('ProfileCtrl', function($rootScope, $scope, $auth, $alert, Account, $window, $upload) {
+
+    var currentUserId = JSON.parse($window.localStorage.user);
 
     /**
      * Get user's profile information.
@@ -36,6 +38,35 @@ angular.module('MyApp')
         });
       });
     };
+
+
+    $scope.onFileSelect = function(image) {
+      $scope.uploadInProgress = true;
+      $scope.uploadProgress = 0;
+
+      if (angular.isArray(image)) {
+        image = image[0];
+      }
+
+      $scope.upload = $upload.upload({
+        url: '/api/upload/image',
+        method: 'POST',
+        data: {
+          type: 'profile',
+          userId: currentUserId
+        },
+        file: image
+      }).progress(function(event) {
+        $scope.uploadProgress = Math.floor(event.loaded / event.total);
+        $scope.$apply();
+      }).success(function(data, status, headers, config) {
+        AlertService.success('Photo uploaded!');
+      }).error(function(err) {
+        $scope.uploadInProgress = false;
+        AlertService.error('Error uploading file: ' + err.message || err);
+      });
+    };
+
 
     /**
      * Link third-party provider.

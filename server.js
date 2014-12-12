@@ -11,6 +11,9 @@ var moment = require('moment');
 var mongoose = require('mongoose');
 var request = require('request');
 var _ = require('underscore');
+var uuid = require('uuid'); 
+var multiparty = require('multiparty');
+var s3 = require('s3');
 
 var config = require('./config/config');
 var User = require('./server/models/UserSchema');
@@ -70,6 +73,47 @@ function createToken(user) {
 
   return jwt.encode(payload, config.TOKEN_SECRET);
 }
+
+/*
+ |--------------------------------------------------------------------------
+ | Upload File to S3
+ |--------------------------------------------------------------------------
+ */
+
+// var s3Client = s3.createClient({
+//   key: config.AMAZON.key,
+//   secret: config.AMAZON.secret,
+//   bucket: config.AMAZON.bucket
+// });
+
+// app.post('/api/upload/image', function(req, res) {
+//     var form = new multiparty.Form();
+//     form.parse(req, function(err, fields, files) {
+//       var file = files.file[0];
+//       console.log(req);
+//       console.log(file);
+//       var contentType = file.headers['content-type'];
+//       var extension = file.path.substring(file.path.lastIndexOf('.'));
+//       var destPath = '/' + req.body.userId + '/profile' + '/' + uuid.v4() + extension;
+
+//       var headers = {
+//         'x-amz-acl': 'public-read',
+//         'Content-Length': file.size,
+//         'Content-Type': contentType
+//       };
+//       var uploader = s3Client.uploadFile(file.path, destPath, headers);
+
+//       uploader.on('error', function(err) {
+//         //TODO handle this
+//       });
+
+//       uploader.on('end', function(url) {
+//         //TODO do something with the url
+//         console.log('file opened:', url);
+//       });
+//   });
+// });
+
 
 /*
  |--------------------------------------------------------------------------
