@@ -31,7 +31,6 @@ angular.module('MyApp')
      */
     $scope.createStatus = function() {
       Status.postStatus({
-        id: user.id,
         displayName: user.displayName,
         category: $scope.status.category,
         text: $scope.status.text
@@ -49,11 +48,9 @@ angular.module('MyApp')
       });
     };
 
-    $scope.addLike = function(statusId, userId, type){
-      console.log(statusId + ' ' + userId + ' ' + type);
+    $scope.addLike = function(statusId, type){
       Status.addLike({
         id: statusId,
-        userId: userId,
         type: type
       })
       .success(function(data){
@@ -74,11 +71,9 @@ angular.module('MyApp')
       });
     };
 
-    $scope.removeLike = function(statusId, userId, type){
-      console.log(statusId + ' ' + userId + ' ' + type);
+    $scope.removeLike = function(statusId, type){
       Status.removeLike({
         id: statusId,
-        userId: userId,
         type: type
       })
       .success(function(data){

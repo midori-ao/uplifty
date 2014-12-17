@@ -46,7 +46,7 @@
                   <td>{{status.category}}</td>
                   <td>{{status.text}}</td>
                   <td><div class="profile-icons" ng-repeat="user in status.likes"><img ng-src="http://localhost:3000/images/profiles/{{user.userId}}.jpg" width="25" height="25"></div></td>
-                  <td><button ng-click="addLike(status._id, currentUserId, 'like')">Like</button><button ng-click="removeLike(status._id, currentUserId, 'like')">Remove</button></td>
+                  <td><button ng-click="addLike(status._id, 'like')">Like</button><button ng-click="removeLike(status._id, 'like')">Remove</button></td>
                 </tr>
               </tbody>
             </table>

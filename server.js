@@ -160,7 +160,7 @@ app.post('/api/postStatus', ensureAuthenticated, function(req, res) {
           var status2 = {
               id:         maxid,
               author:     {
-                  id: data.id,
+                  id: req.user,
                   username: data.displayName
               },
               date:       'test',
@@ -183,13 +183,14 @@ app.post('/api/postStatus', ensureAuthenticated, function(req, res) {
  | PUT /api/giveLike
  |--------------------------------------------------------------------------
  */
-app.put('/api/addLike', function(req, res) {
+app.put('/api/addLike', ensureAuthenticated, function(req, res) {
   var data = req.body;
+  console.log('req.user ' + req.user);
     Status.find({}, function(err, statuses){
       if (err) return res.status(401).send({ message: 'Statuses dont exist' }); //is this error correct? 
 
         var addItem = {
-            userId: data.userId,
+            userId: req.user,
             type: data.type
         };
 
@@ -211,13 +212,13 @@ app.put('/api/addLike', function(req, res) {
  | PUT /api/removeLike
  |--------------------------------------------------------------------------
  */
-app.put('/api/removeLike', function(req, res) {
+app.put('/api/removeLike', ensureAuthenticated, function(req, res) {
   var data = req.body;
     Status.find({}, function(err, statuses){
       if (err) return res.status(401).send({ message: 'Statuses dont exist' }); //is this error correct? 
 
         var removeItem = {
-            userId: data.userId,
+            userId: req.user,
             type: data.type
         };
 
