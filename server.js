@@ -170,7 +170,9 @@ app.post('/api/postStatus', ensureAuthenticated, function(req, res) {
 
           Status.create(status2, function (err) {
               if (err) return res.status(401).send({ message: 'Error creating status' });
-              res.send('yes');
+              Status.find({}, function(err, modstatus){
+                res.send(modstatus);
+              })
           });
         // });
     });

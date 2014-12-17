@@ -36,10 +36,8 @@ angular.module('MyApp')
         category: $scope.status.category,
         text: $scope.status.text
       })
-      .success(function(){ //find a better way to refresh view after submission
-        if(!$rootScope.$$phase) {
-        $rootScope.$apply();
-        }
+      .success(function(data){ //find a better way to refresh view after submission
+        $scope.statuses = data;
       })
       .catch(function(response) {
         $alert({
