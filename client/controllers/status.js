@@ -58,6 +58,14 @@ angular.module('MyApp')
         userId: userId,
         type: type
       })
+      .success(function(data){
+        angular.forEach($scope.statuses, function(value, key, object) {
+          if (value._id === statusId) {
+            console.log(value);
+            $scope.statuses[key] = data;
+          }
+        });
+      })
       .catch(function(response) {
         $alert({
           content: response.data.message,
@@ -74,6 +82,14 @@ angular.module('MyApp')
         id: statusId,
         userId: userId,
         type: type
+      })
+      .success(function(data){
+        angular.forEach($scope.statuses, function(value, key, object) {
+          if (value._id === statusId) {
+            console.log(value);
+            $scope.statuses[key] = data;
+          }
+        });
       })
       .catch(function(response) {
         $alert({
